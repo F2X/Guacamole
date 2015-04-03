@@ -1,18 +1,19 @@
-#!/bin/sh
+#!/bin/sh -x
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH="$(dirname "$SCRIPT")"
 
-UPDATE_TYPE='major'
+UPDATE_TYPE='patch'
 
-DESCRIBE=`git describe --tags --always`
+DESCRIBE=`git describe --tags`
 
-# increment the build number (ie 115 to 116)
-MAJOR=`echo $DESCRIBE | awk '{split($0,a,"."); print a[1]}'`
-MINOR=`echo $DESCRIBE | awk '{split($0,a,"."); print a[2]}'`
-PATCH=`echo $DESCRIBE | awk '{split($0,a,"."); print a[3]}'`
+MAJOR=`echo ${DESCRIBE} | awk '{split($0,a,"."); print a[1]}'`
+MINOR=`echo ${DESCRIBE} | awk '{split($0,a,"."); print a[2]}'`
+PATCH=`echo ${DESCRIBE} | awk '{split($0,a,"."); print a[3]}' | awk '{split($0,a,"-"); print a[1]}'`
 
 echo "Current version: ${DESCRIBE}"
+# hack to remove 'v'
+MAJOR=$((MAJOR+0))
 
 case ${UPDATE_TYPE} in
     major ) MAJOR=$((MAJOR+1))
