@@ -1,9 +1,11 @@
-#!/bin/sh -x
+#!/bin/sh
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH="$(dirname "$SCRIPT")"
 
-UPDATE_TYPE='patch'
+UPDATE_TYPE=$1
+[ -z "${UPDATE_TYPE}" ] && UPDATE_TYPE="patch"
+echo "Update: ${UPDATE_TYPE}"
 
 DESCRIBE=`git describe --tags`
 
