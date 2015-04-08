@@ -30,23 +30,10 @@ echo "Update version: ${UPDATE_VERSION}"
 git tag ${UPDATE_VERSION}
 git checkout -b ${UPDATE_VERSION}-release
 git rebase -i ${DESCRIBE}
-
-#
-#if [[ "${DESCRIBE}" =~ ^[A-Fa-f0-9]+$ ]]; then
-#    VERSION="0.0.0"
-#    BUILD=`git rev-list HEAD --count`
-#    PATCH=${DESCRIBE}
-#fi
-#
-#if [ "${BUILD}" = "" ]; then
-#    BUILD='0'
-#fi
-#
-#if [ "${BUILD}" = "" ]; then
-#    PATCH=$DESCRIBE
-#fi
-#
-#
-#echo ${VERSION}+build.${BUILD}.${PATCH}
+SHA1=$(git log -n 1 --pretty=format:"%H" master)
+echo "Cherry-pick commit: ${SHA1}"
+git checkout github-master
+git cherry-pick ${SHA1}
+git tag v${UPDATE_VERSION}
 
 exit 0
